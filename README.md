@@ -11,7 +11,7 @@
 
 <br/>
 
-![Dashboard Preview](https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80&auto=format&fit=crop)
+![Dashboard Preview](image.png)
 
 <br/>
 
