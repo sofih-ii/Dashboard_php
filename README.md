@@ -15,7 +15,7 @@
 
 <br/>
 
-> Proyecto académico — Programación Avanzada 2025
+> Proyecto académico — Programación Avanzada 2026
 
 </div>
 
