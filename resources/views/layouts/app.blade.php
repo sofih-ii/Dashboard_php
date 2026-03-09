@@ -46,8 +46,18 @@
                             <i class="fas fa-cog"></i> Configuración
                         </a>
                     </li>
+                    <li class="nav-item d-flex align-items-center ms-2">
+                        <span class="nav-link text-white pe-2">
+                            <i class="fas fa-user-circle"></i> {{ Auth::user()->name }}
+                        </span>
+                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/"><i class="fas fa-sign-out-alt"></i> Home</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="nav-link btn btn-link text-white">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </div>

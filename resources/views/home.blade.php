@@ -56,14 +56,14 @@
             <p class="auth-sub">Ingresa tus credenciales para acceder al panel.</p>
 
             <ul class="nav nav-tabs mb-4" id="authTab">
-                <li class="nav-item"><a class="nav-link {{ !session('show_register') ? 'active' : '' }}" data-bs-toggle="tab" href="#signin">Iniciar sesión</a></li>
-                <li class="nav-item"><a class="nav-link {{ session('show_register') ? 'active' : '' }}" data-bs-toggle="tab" href="#signup">Crear cuenta</a></li>
+                <li class="nav-item"><a class="nav-link {{ !($showRegister ?? false) ? 'active' : '' }}" data-bs-toggle="tab" href="#signin">Iniciar sesión</a></li>
+                <li class="nav-item"><a class="nav-link {{ ($showRegister ?? false) ? 'active' : '' }}" data-bs-toggle="tab" href="#signup">Crear cuenta</a></li>
             </ul>
 
             <div class="tab-content">
 
                 {{-- LOGIN --}}
-                <div class="tab-pane fade {{ !session('show_register') ? 'show active' : '' }}" id="signin">
+                <div class="tab-pane fade {{ !($showRegister ?? false) ? 'show active' : '' }}" id="signin">
                     @if ($errors->any())
                         <div class="alert mb-3" style="background:rgba(242,167,195,0.2);border:1.5px solid var(--card-pink);color:#8a0040;border-radius:12px;font-size:0.82rem;padding:0.75rem 1rem;">
                             <i class="fas fa-exclamation-circle"></i> {{ $errors->first() }}
@@ -96,8 +96,7 @@
                     </form>
                 </div>
 
-                <div class="tab-pane fade {{ session('show_register') ? 'show active' : '' }}" id="signup">
-                    <form method="POST" action="{{ route('register') }}">
+                <div class="tab-pane fade {{ ($showRegister ?? false) ? 'show active' : '' }}" id="signup">                    <form method="POST" action="{{ route('register') }}">
                         @csrf
                         <div class="mb-3">
                             <label class="form-label">Nombre completo</label>
