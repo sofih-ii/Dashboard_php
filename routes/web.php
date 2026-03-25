@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PqrsController;
+use App\Http\Controllers\UserController;
 
 // RUTAS PÚBLICAS
 Route::get('/',        [AuthController::class, 'showLogin'])->name('home');
@@ -33,8 +35,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/facturas',      fn() => view('facturas'))->name('facturas');
     Route::get('/mensajes',      fn() => view('mensajes'))->name('mensajes');
     Route::get('/configuracion', fn() => view('configuracion'))->name('configuracion');
-    Route::get('/nosotros',      fn() => view('nosotros'))->name('nosotros');
 
+    // Ruta GET - mostrar la vista
+    Route::get('/nosotros', function () {
+        return view('nosotros');
+    })->name('nosotros');
+
+    // Ruta POST - procesar el formulario
+    Route::post('/nosotros/pqrs', [PqrsController::class, 'store'])->name('pqrs.store');
     Route::get('/ventas',       [DashboardController::class, 'ventas'])->name('ventas');
     Route::get('/clientes',     [DashboardController::class, 'clientes'])->name('clientes');
     Route::get('/facturas',     [DashboardController::class, 'facturas'])->name('facturas');
