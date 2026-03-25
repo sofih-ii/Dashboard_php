@@ -76,6 +76,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link @yield('side_estadisticas')" href="/estadisticas">
+                                <i class="fas fa-chart-bar"></i> Estadísticas
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link @yield('side_analisis')" href="/analisis">
                                 <i class="fas fa-chart-line"></i> Análisis
                             </a>

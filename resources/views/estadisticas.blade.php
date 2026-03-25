@@ -2,7 +2,7 @@
 
 @section('title', 'Estadísticas - Dashboard')
 @section('nav_estadisticas', 'active')
-@section('side_analisis', 'active')
+@section('side_estadisticas', 'active')
 
 @section('content')
 

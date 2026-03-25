@@ -90,11 +90,44 @@
     </div>
 </div>
 
+{{-- KPIs con datos reales --}}
 <div class="row">
-    <div class="col-md-3"><div class="card text-white bg-primary mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-users"></i> Usuarios</h5><p class="card-text display-6">1,234</p><small class="text-white-50">+12% este mes</small></div></div></div>
-    <div class="col-md-3"><div class="card text-white bg-success mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-shopping-cart"></i> Ventas</h5><p class="card-text display-6">$12,345</p><small class="text-white-50">+25% este mes</small></div></div></div>
-    <div class="col-md-3"><div class="card text-white bg-warning mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-chart-line"></i> Crecimiento</h5><p class="card-text display-6">+15%</p><small class="text-white-50">vs mes anterior</small></div></div></div>
-    <div class="col-md-3"><div class="card text-white bg-danger mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-exclamation-triangle"></i> Alertas</h5><p class="card-text display-6">3</p><small class="text-white-50">Requieren atención</small></div></div></div>
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Usuarios</h5>
+                <p class="card-text display-6">{{ number_format($totalUsuarios) }}</p>
+                <small class="text-white-50">Registrados</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-shopping-cart"></i> Ventas</h5>
+                <p class="card-text display-6">${{ number_format($totalVentas, 0, ',', '.') }}</p>
+                <small class="text-white-50">Total acumulado</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-chart-line"></i> Crecimiento</h5>
+                <p class="card-text display-6">{{ $crecimiento }}</p>
+                <small class="text-white-50">vs mes anterior</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-exclamation-triangle"></i> Alertas</h5>
+                <p class="card-text display-6">{{ $totalAlertas }}</p>
+                <small class="text-white-50">Requieren atención</small>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row mb-4">
@@ -104,31 +137,146 @@
             <div class="card-body"><canvas id="salesChart" height="200"></canvas></div>
         </div>
     </div>
+
+    {{-- Actividad Reciente con datos reales --}}
     <div class="col-md-4">
-        <div class="card">
-            <div class="card-header"><h5>Actividad Reciente</h5></div>
-            <div class="card-body">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Actividad Reciente</h5>
+                <span class="badge bg-primary">En vivo</span>
+            </div>
+            <div class="card-body p-0">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><i class="fas fa-user-plus text-success me-2"></i> Nuevo usuario registrado</li>
-                    <li class="list-group-item"><i class="fas fa-shopping-cart text-primary me-2"></i> Venta completada</li>
-                    <li class="list-group-item"><i class="fas fa-file-invoice text-warning me-2"></i> Factura generada</li>
-                    <li class="list-group-item"><i class="fas fa-envelope text-info me-2"></i> Mensaje recibido</li>
+
+                    {{-- Nuevo usuario --}}
+                    <li class="list-group-item d-flex align-items-start gap-2 py-3">
+                        <div class="mt-1">
+                            <i class="fas fa-user-plus text-success fa-lg"></i>
+                        </div>
+                        <div class="flex-fill">
+                            <div class="d-flex justify-content-between">
+                                <strong class="small">Nuevo usuario registrado</strong>
+                                <small class="text-muted">{{ $ultimoUsuario?->created_at->diffForHumans() ?? '—' }}</small>
+                            </div>
+                            <p class="mb-0 small text-muted">
+                                {{ $ultimoUsuario?->name ?? 'Sin datos' }}
+                                — {{ $ultimoUsuario?->email ?? '' }}
+                            </p>
+                        </div>
+                    </li>
+
+                    {{-- Venta completada --}}
+                    <li class="list-group-item d-flex align-items-start gap-2 py-3">
+                        <div class="mt-1">
+                            <i class="fas fa-shopping-cart text-primary fa-lg"></i>
+                        </div>
+                        <div class="flex-fill">
+                            <div class="d-flex justify-content-between">
+                                <strong class="small">Venta completada</strong>
+                                <small class="text-muted">{{ $ultimaVenta?->created_at->diffForHumans() ?? '—' }}</small>
+                            </div>
+                            <p class="mb-0 small text-muted">
+                                @if($ultimaVenta)
+                                    {{ $ultimaVenta->numero_orden }} — {{ $ultimaVenta->producto }}
+                                    — <strong>${{ number_format($ultimaVenta->total, 2) }}</strong>
+                                @else
+                                    Sin ventas completadas
+                                @endif
+                            </p>
+                        </div>
+                    </li>
+
+                    {{-- Factura generada --}}
+                    <li class="list-group-item d-flex align-items-start gap-2 py-3">
+                        <div class="mt-1">
+                            <i class="fas fa-file-invoice text-warning fa-lg"></i>
+                        </div>
+                        <div class="flex-fill">
+                            <div class="d-flex justify-content-between">
+                                <strong class="small">Factura generada</strong>
+                                <small class="text-muted">{{ $ultimaFactura?->created_at->diffForHumans() ?? '—' }}</small>
+                            </div>
+                            <p class="mb-0 small text-muted">
+                                @if($ultimaFactura)
+                                    {{ $ultimaFactura->numero_factura }} — {{ $ultimaFactura->concepto }}
+                                    — <strong>${{ number_format($ultimaFactura->monto, 2) }}</strong>
+                                @else
+                                    Sin facturas registradas
+                                @endif
+                            </p>
+                        </div>
+                    </li>
+
+                    {{-- Mensaje recibido --}}
+                    <li class="list-group-item d-flex align-items-start gap-2 py-3">
+                        <div class="mt-1">
+                            <i class="fas fa-envelope text-info fa-lg"></i>
+                        </div>
+                        <div class="flex-fill">
+                            <div class="d-flex justify-content-between">
+                                <strong class="small">Mensaje recibido</strong>
+                                <small class="text-muted">{{ $ultimoMensaje?->created_at->diffForHumans() ?? '—' }}</small>
+                            </div>
+                            <p class="mb-0 small text-muted">
+                                @if($ultimoMensaje)
+                                    <strong>{{ $ultimoMensaje->cliente->nombre ?? '' }}:</strong>
+                                    {{ Str::limit($ultimoMensaje->contenido, 45) }}
+                                @else
+                                    Sin mensajes recibidos
+                                @endif
+                            </p>
+                        </div>
+                    </li>
+
                 </ul>
+            </div>
+            <div class="card-footer text-center">
+                <a href="{{ route('mensajes') }}" class="btn btn-sm btn-outline-primary w-100">
+                    <i class="fas fa-inbox"></i> Ver todos los mensajes
+                </a>
             </div>
         </div>
     </div>
 </div>
 
+{{-- Tabla clientes recientes desde BD --}}
 <div class="row mt-2">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header"><h5>Datos Recientes</h5></div>
+            <div class="card-header"><h5>Clientes Recientes</h5></div>
             <div class="card-body">
                 <table class="table table-striped table-hover" id="tablaDatos">
-                    <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Segmento</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
                     <tbody>
-                        <tr><td>1</td><td>Juan Pérez</td><td>juan@example.com</td><td>2023-10-01</td><td><button class="btn btn-sm btn-primary">Editar</button> <button class="btn btn-sm btn-danger">Eliminar</button></td></tr>
-                        <tr><td>2</td><td>María García</td><td>maria@example.com</td><td>2023-10-02</td><td><button class="btn btn-sm btn-primary">Editar</button> <button class="btn btn-sm btn-danger">Eliminar</button></td></tr>
+                        @forelse($datosRecientes as $cliente)
+                        <tr>
+                            <td>#{{ str_pad($cliente->id, 3, '0', STR_PAD_LEFT) }}</td>
+                            <td>{{ $cliente->nombre }} {{ $cliente->apellido }}</td>
+                            <td>{{ $cliente->email }}</td>
+                            <td>
+                                <span class="badge bg-warning">{{ ucfirst($cliente->segmento ?? '—') }}</span>
+                            </td>
+                            <td>
+                                <span class="badge bg-{{ $cliente->estado === 'activo' ? 'success' : 'danger' }}">
+                                    {{ ucfirst($cliente->estado) }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('clientes') }}" class="btn btn-sm btn-primary">Ver</a>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr><td colspan="6" class="text-center text-muted">No hay clientes registrados.</td></tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -193,38 +341,31 @@ function exportarDashboard() {
 
 function exportarPDF() {
     bootstrap.Modal.getInstance(document.getElementById('modalExportar'))?.hide();
-    setTimeout(() => {
-        window.print();
-    }, 400);
+    setTimeout(() => { window.print(); }, 400);
 }
 
 function imprimirPagina() {
     bootstrap.Modal.getInstance(document.getElementById('modalExportar'))?.hide();
-    setTimeout(() => {
-        window.print();
-    }, 400);
+    setTimeout(() => { window.print(); }, 400);
 }
 
 function exportarCSV() {
     const tabla = document.getElementById('tablaDatos');
     const filas = tabla.querySelectorAll('tr');
     let csv = '';
-
     filas.forEach(fila => {
         const celdas = fila.querySelectorAll('th, td');
         const fila_csv = Array.from(celdas)
-            .slice(0, -1) // Excluye columna Acciones
+            .slice(0, -1)
             .map(celda => `"${celda.innerText.trim()}"`)
             .join(',');
         csv += fila_csv + '\n';
     });
-
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'dashboard_datos.csv';
+    link.download = 'clientes_recientes.csv';
     link.click();
-
     bootstrap.Modal.getInstance(document.getElementById('modalExportar'))?.hide();
     mostrarToast('✅ CSV exportado correctamente');
 }
