@@ -148,28 +148,118 @@
                     </div>
                 </div>
                 <div class="col-md-8">
+
+                    {{-- ✅ Mensaje de éxito --}}
+                    @if(session('pqrs_success'))
+                        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert" style="border-radius:12px;">
+                            <i class="fas fa-check-circle me-2"></i>{{ session('pqrs_success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    {{-- ❌ Errores de validación --}}
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" style="border-radius:12px;">
+                            <i class="fas fa-exclamation-circle me-2"></i><strong>Corrige los siguientes errores:</strong>
+                            <ul class="mb-0 mt-1">
+                                @foreach($errors->all() as $error)
+                                    <li style="font-size:0.82rem;">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <label class="pqrs-label mb-2">Tipo de solicitud</label>
                     <div class="row g-2 mb-4">
-                        <div class="col-6 col-md-3"><div class="pqrs-type-btn active" onclick="selectTipo(this)"><i class="fas fa-hand-paper"></i>Petición</div></div>
-                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this)"><i class="fas fa-exclamation-triangle"></i>Queja</div></div>
-                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this)"><i class="fas fa-times-circle"></i>Reclamo</div></div>
-                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this)"><i class="fas fa-lightbulb"></i>Sugerencia</div></div>
+                        <div class="col-6 col-md-3"><div class="pqrs-type-btn active" onclick="selectTipo(this,'peticion')"><i class="fas fa-hand-paper"></i>Petición</div></div>
+                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'queja')"><i class="fas fa-exclamation-triangle"></i>Queja</div></div>
+                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'reclamo')"><i class="fas fa-times-circle"></i>Reclamo</div></div>
+                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'sugerencia')"><i class="fas fa-lightbulb"></i>Sugerencia</div></div>
                     </div>
-                    <form>
+
+                    <form action="{{ route('pqrs.store') }}" method="POST">
                         @csrf
+
+                        {{-- Input oculto para el tipo seleccionado --}}
+                        <input type="hidden" name="tipo" id="tipoHidden" value="{{ old('tipo', 'peticion') }}">
+
                         <div class="row g-3">
-                            <div class="col-md-6"><label class="pqrs-label">Nombre completo</label><input type="text" class="form-control pqrs-input" placeholder="Tu nombre"></div>
-                            <div class="col-md-6"><label class="pqrs-label">Correo electrónico</label><input type="email" class="form-control pqrs-input" placeholder="correo@ejemplo.com"></div>
-                            <div class="col-md-6"><label class="pqrs-label">Teléfono</label><input type="text" class="form-control pqrs-input" placeholder="+57 300 000 0000"></div>
-                            <div class="col-md-6"><label class="pqrs-label">Módulo relacionado</label><select class="form-select pqrs-input"><option value="">Seleccionar...</option><option>Dashboard</option><option>Ventas</option><option>Clientes</option><option>Facturas</option><option>Mensajes</option><option>Otro</option></select></div>
-                            <div class="col-12"><label class="pqrs-label">Asunto</label><input type="text" class="form-control pqrs-input" placeholder="Resumen breve de tu solicitud"></div>
-                            <div class="col-12"><label class="pqrs-label">Descripción detallada</label><textarea class="form-control pqrs-input" rows="4" placeholder="Describe tu solicitud con el mayor detalle posible..."></textarea></div>
+                            <div class="col-md-6">
+                                <label class="pqrs-label">Nombre completo</label>
+                                <input type="text" name="nombre"
+                                       class="form-control pqrs-input @error('nombre') is-invalid @enderror"
+                                       placeholder="Tu nombre"
+                                       value="{{ old('nombre') }}">
+                                @error('nombre')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="pqrs-label">Correo electrónico</label>
+                                <input type="email" name="email"
+                                       class="form-control pqrs-input @error('email') is-invalid @enderror"
+                                       placeholder="correo@ejemplo.com"
+                                       value="{{ old('email') }}">
+                                @error('email')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="pqrs-label">Teléfono</label>
+                                <input type="text" name="telefono"
+                                       class="form-control pqrs-input"
+                                       placeholder="+57 300 000 0000"
+                                       value="{{ old('telefono') }}">
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="pqrs-label">Módulo relacionado</label>
+                                <select name="modulo" class="form-select pqrs-input">
+                                    <option value="">Seleccionar...</option>
+                                    <option {{ old('modulo')=='Dashboard' ? 'selected':'' }}>Dashboard</option>
+                                    <option {{ old('modulo')=='Ventas'    ? 'selected':'' }}>Ventas</option>
+                                    <option {{ old('modulo')=='Clientes'  ? 'selected':'' }}>Clientes</option>
+                                    <option {{ old('modulo')=='Facturas'  ? 'selected':'' }}>Facturas</option>
+                                    <option {{ old('modulo')=='Mensajes'  ? 'selected':'' }}>Mensajes</option>
+                                    <option {{ old('modulo')=='Otro'      ? 'selected':'' }}>Otro</option>
+                                </select>
+                            </div>
+
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary px-4 py-2" style="font-size:0.88rem;font-weight:600;"><i class="fas fa-paper-plane me-2"></i>Enviar solicitud</button>
-                                <span style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-left:1rem;"><i class="fas fa-lock me-1"></i>Información protegida</span>
+                                <label class="pqrs-label">Asunto</label>
+                                <input type="text" name="asunto"
+                                       class="form-control pqrs-input @error('asunto') is-invalid @enderror"
+                                       placeholder="Resumen breve de tu solicitud"
+                                       value="{{ old('asunto') }}">
+                                @error('asunto')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <label class="pqrs-label">Descripción detallada</label>
+                                <textarea name="mensaje" rows="4"
+                                          class="form-control pqrs-input @error('mensaje') is-invalid @enderror"
+                                          placeholder="Describe tu solicitud con el mayor detalle posible...">{{ old('mensaje') }}</textarea>
+                                @error('mensaje')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary px-4 py-2" style="font-size:0.88rem;font-weight:600;">
+                                    <i class="fas fa-paper-plane me-2"></i>Enviar solicitud
+                                </button>
+                                <span style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-left:1rem;">
+                                    <i class="fas fa-lock me-1"></i>Información protegida
+                                </span>
                             </div>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -180,9 +270,21 @@
 
 @section('scripts')
 <script>
-function selectTipo(el) {
+function selectTipo(el, valor) {
     document.querySelectorAll('.pqrs-type-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
+    document.getElementById('tipoHidden').value = valor;
 }
+
+// Restaurar botón activo si hay old('tipo') tras un error de validación
+document.addEventListener('DOMContentLoaded', function () {
+    const tipoActual = document.getElementById('tipoHidden').value;
+    const mapa = { peticion: 0, queja: 1, reclamo: 2, sugerencia: 3 };
+    const botones = document.querySelectorAll('.pqrs-type-btn');
+    if (tipoActual && mapa[tipoActual] !== undefined) {
+        botones.forEach(b => b.classList.remove('active'));
+        botones[mapa[tipoActual]].classList.add('active');
+    }
+});
 </script>
 @endsection

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PqrsController;
 
 // RUTAS PÚBLICAS
 Route::get('/',        [AuthController::class, 'showLogin'])->name('home');
@@ -32,7 +33,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/estadisticas',  fn() => view('estadisticas'))->name('estadisticas');
     Route::get('/analisis',      fn() => view('analisis'))->name('analisis');
     Route::get('/configuracion', fn() => view('configuracion'))->name('configuracion');
-    Route::get('/nosotros',      fn() => view('nosotros'))->name('nosotros');
+
+    // Nosotros + PQRS (Sofia)
+    Route::get('/nosotros',       fn() => view('nosotros'))->name('nosotros');
+    Route::post('/nosotros/pqrs', [PqrsController::class, 'store'])->name('pqrs.store');
 
     // Vistas con datos reales desde BD
     Route::get('/ventas',        [DashboardController::class, 'ventas'])->name('ventas');
