@@ -10,8 +10,82 @@
     <h1 class="h2">Panel de Control</h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group me-2">
-            <button class="btn btn-sm btn-outline-secondary">Compartir</button>
-            <button class="btn btn-sm btn-outline-secondary">Exportar</button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="compartirDashboard()">
+                <i class="fas fa-share-alt"></i> Compartir
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="exportarDashboard()">
+                <i class="fas fa-download"></i> Exportar
+            </button>
+        </div>
+    </div>
+</div>
+
+{{-- Toast notificación --}}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div id="toastMsg" class="toast align-items-center text-white border-0" role="alert">
+        <div class="d-flex">
+            <div class="toast-body" id="toastTexto"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Compartir --}}
+<div class="modal fade" id="modalCompartir" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-share-alt"></i> Compartir Dashboard</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">Copia el enlace para compartir este panel:</p>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="urlCompartir" readonly>
+                    <button class="btn btn-primary" onclick="copiarUrl()">
+                        <i class="fas fa-copy"></i> Copiar
+                    </button>
+                </div>
+                <hr>
+                <p class="text-muted mb-2">Compartir por:</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-success flex-fill" onclick="compartirWhatsapp()">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </button>
+                    <button class="btn btn-info text-white flex-fill" onclick="compartirEmail()">
+                        <i class="fas fa-envelope"></i> Email
+                    </button>
+                    <button class="btn btn-secondary flex-fill" onclick="copiarUrl()">
+                        <i class="fas fa-link"></i> Copiar link
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Exportar --}}
+<div class="modal fade" id="modalExportar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="fas fa-download"></i> Exportar Dashboard</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted mb-3">Selecciona el formato de exportación:</p>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-danger" onclick="exportarPDF()">
+                        <i class="fas fa-file-pdf me-2"></i> Exportar como PDF
+                    </button>
+                    <button class="btn btn-outline-success" onclick="exportarCSV()">
+                        <i class="fas fa-file-csv me-2"></i> Exportar tabla como CSV
+                    </button>
+                    <button class="btn btn-outline-primary" onclick="imprimirPagina()">
+                        <i class="fas fa-print me-2"></i> Imprimir
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -50,7 +124,7 @@
         <div class="card">
             <div class="card-header"><h5>Datos Recientes</h5></div>
             <div class="card-body">
-                <table class="table table-striped table-hover">
+                <table class="table table-striped table-hover" id="tablaDatos">
                     <thead><tr><th>ID</th><th>Nombre</th><th>Email</th><th>Fecha</th><th>Acciones</th></tr></thead>
                     <tbody>
                         <tr><td>1</td><td>Juan Pérez</td><td>juan@example.com</td><td>2023-10-01</td><td><button class="btn btn-sm btn-primary">Editar</button> <button class="btn btn-sm btn-danger">Eliminar</button></td></tr>
@@ -66,6 +140,7 @@
 
 @section('scripts')
 <script>
+// ── GRÁFICA ──────────────────────────────────────
 new Chart(document.getElementById('salesChart').getContext('2d'), {
     type: 'line',
     data: {
@@ -74,5 +149,84 @@ new Chart(document.getElementById('salesChart').getContext('2d'), {
     },
     options: { responsive: true }
 });
+
+// ── TOAST ──────────────────────────────────────
+function mostrarToast(mensaje, tipo = 'success') {
+    const toast = document.getElementById('toastMsg');
+    const texto = document.getElementById('toastTexto');
+    texto.textContent = mensaje;
+    toast.className = `toast align-items-center text-white border-0 bg-${tipo}`;
+    new bootstrap.Toast(toast, { delay: 3000 }).show();
+}
+
+// ── COMPARTIR ──────────────────────────────────────
+function compartirDashboard() {
+    document.getElementById('urlCompartir').value = window.location.href;
+    new bootstrap.Modal(document.getElementById('modalCompartir')).show();
+}
+
+function copiarUrl() {
+    const url = document.getElementById('urlCompartir').value;
+    navigator.clipboard.writeText(url).then(() => {
+        bootstrap.Modal.getInstance(document.getElementById('modalCompartir'))?.hide();
+        mostrarToast('✅ Enlace copiado al portapapeles');
+    });
+}
+
+function compartirWhatsapp() {
+    const url = encodeURIComponent(window.location.href);
+    const texto = encodeURIComponent('Mira este Dashboard: ');
+    window.open(`https://wa.me/?text=${texto}${url}`, '_blank');
+}
+
+function compartirEmail() {
+    const url = window.location.href;
+    const asunto = encodeURIComponent('Dashboard - Panel de Control');
+    const cuerpo = encodeURIComponent(`Te comparto el enlace al dashboard:\n${url}`);
+    window.location.href = `mailto:?subject=${asunto}&body=${cuerpo}`;
+}
+
+// ── EXPORTAR ──────────────────────────────────────
+function exportarDashboard() {
+    new bootstrap.Modal(document.getElementById('modalExportar')).show();
+}
+
+function exportarPDF() {
+    bootstrap.Modal.getInstance(document.getElementById('modalExportar'))?.hide();
+    setTimeout(() => {
+        window.print();
+    }, 400);
+}
+
+function imprimirPagina() {
+    bootstrap.Modal.getInstance(document.getElementById('modalExportar'))?.hide();
+    setTimeout(() => {
+        window.print();
+    }, 400);
+}
+
+function exportarCSV() {
+    const tabla = document.getElementById('tablaDatos');
+    const filas = tabla.querySelectorAll('tr');
+    let csv = '';
+
+    filas.forEach(fila => {
+        const celdas = fila.querySelectorAll('th, td');
+        const fila_csv = Array.from(celdas)
+            .slice(0, -1) // Excluye columna Acciones
+            .map(celda => `"${celda.innerText.trim()}"`)
+            .join(',');
+        csv += fila_csv + '\n';
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'dashboard_datos.csv';
+    link.click();
+
+    bootstrap.Modal.getInstance(document.getElementById('modalExportar'))?.hide();
+    mostrarToast('✅ CSV exportado correctamente');
+}
 </script>
 @endsection
