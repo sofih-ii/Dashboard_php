@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TwoFactorController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PqrsController;
-use App\Http\Controllers\UserController;
 
 // RUTAS PÚBLICAS
 Route::get('/',        [AuthController::class, 'showLogin'])->name('home');
@@ -35,10 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/analisis',      fn() => view('analisis'))->name('analisis');
     Route::get('/configuracion', fn() => view('configuracion'))->name('configuracion');
 
-// Nosotros + PQRS
-    Route::get('/nosotros', function () {
-        return view('nosotros');
-    })->name('nosotros');
+    // Nosotros + PQRS (Sofia)
+    Route::get('/nosotros',       fn() => view('nosotros'))->name('nosotros');
     Route::post('/nosotros/pqrs', [PqrsController::class, 'store'])->name('pqrs.store');
 
     // Vistas con datos reales desde BD
