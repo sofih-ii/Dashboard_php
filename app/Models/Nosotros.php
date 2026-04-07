@@ -6,5 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Nosotros extends Model
 {
-    //
+    protected $fillable = [
+        'nombre',
+        'email',
+        'tipo',
+        'mensaje',
+    ];
+
+    protected $table = 'nosotros';
 }
