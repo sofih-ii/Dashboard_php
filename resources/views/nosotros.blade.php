@@ -232,6 +232,7 @@
     </div>
 </div>
 
+<<<<<<< HEAD
 <div class="row mb-4">
     <div class="col-12">
         <div class="pqrs-table-wrapper">
