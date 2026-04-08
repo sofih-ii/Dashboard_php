@@ -35,7 +35,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/analisis',      fn() => view('analisis'))->name('analisis');
     Route::get('/configuracion', fn() => view('configuracion'))->name('configuracion');
 
-    Route::get('/nosotros',  [NosotrosController::class, 'index'])->name('nosotros');
+    Route::get('/nosotros', function () {
+        $pqrs = \App\Models\Pqrs::latest()->get();
+        return view('nosotros', compact('pqrs'));
+    })->name('nosotros');    
     Route::post('/pqrs',     [NosotrosController::class, 'store'])->name('pqrs.store');
 
 

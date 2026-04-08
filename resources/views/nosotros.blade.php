@@ -59,43 +59,10 @@
     .pqrs-input:focus { background:rgba(255,255,255,0.09) !important; border-color:var(--card-yellow) !important; box-shadow:0 0 0 3px rgba(232,212,77,0.15) !important; color:#fff !important; }
     .pqrs-input::placeholder { color:rgba(255,255,255,0.3) !important; }
     .pqrs-label { font-family:'DM Sans',sans-serif; font-size:0.72rem; font-weight:600; color:rgba(255,255,255,0.5); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:0.4rem; }
-    /* ── Tabla PQRS ── */
-    .pqrs-table-wrapper { background:#fff; border-radius:16px; padding:1.8rem; box-shadow:0 4px 20px rgba(0,0,0,0.07); margin-top:2rem; }
-    .pqrs-table-title { font-family:'DM Serif Display',serif; font-size:1.3rem; color:#1a1a1a; margin-bottom:0.2rem; }
-    .pqrs-table-sub { font-size:0.78rem; color:#aaa; font-family:'DM Sans',sans-serif; margin-bottom:1.2rem; }
-    .badge-peticion   { background:rgba(168,200,232,0.2); color:#0a3060; }
-    .badge-queja      { background:rgba(242,167,195,0.2); color:#8a0040; }
-    .badge-reclamo    { background:rgba(255,100,100,0.15); color:#8b0000; }
-    .badge-sugerencia { background:rgba(143,187,110,0.2); color:#2a6a0a; }
 </style>
 @endsection
 
 @section('content')
-
-
-@if(session('success'))
-<div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-3" role="alert" style="border-radius:12px;border:none;background:rgba(143,187,110,0.15);color:#1a6b3a;">
-    <i class="fas fa-check-circle"></i>
-    <strong>{{ session('success') }}</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
-
-@if($errors->any())
-<div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" style="border-radius:12px;border:none;background:rgba(220,53,69,0.1);color:#8b1a1a;">
-    <i class="fas fa-exclamation-circle me-2"></i>
-    <strong>Por favor corrige los siguientes errores:</strong>
-    <ul class="mb-0 mt-1">
-        @foreach($errors->all() as $error)
-            <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-</div>
-@endif
-
-@section('content')
-
 
 <div class="hero-nosotros">
     <div class="hero-text">
@@ -114,14 +81,12 @@
     </div>
 </div>
 
-+
 <div class="row g-3 mb-4">
     <div class="col-6 col-md-3"><div class="stat-pill"><div class="stat-pill-icon" style="background:rgba(232,212,77,0.15);"><i class="fas fa-route" style="color:var(--card-yellow)"></i></div><div><div class="stat-pill-num">11</div><div class="stat-pill-label">Rutas activas</div></div></div></div>
     <div class="col-6 col-md-3"><div class="stat-pill"><div class="stat-pill-icon" style="background:rgba(242,167,195,0.15);"><i class="fas fa-file-code" style="color:var(--card-pink)"></i></div><div><div class="stat-pill-num">11</div><div class="stat-pill-label">Vistas Blade</div></div></div></div>
     <div class="col-6 col-md-3"><div class="stat-pill"><div class="stat-pill-icon" style="background:rgba(143,187,110,0.15);"><i class="fas fa-database" style="color:var(--card-green)"></i></div><div><div class="stat-pill-num">4</div><div class="stat-pill-label">Modelos BD</div></div></div></div>
     <div class="col-6 col-md-3"><div class="stat-pill"><div class="stat-pill-icon" style="background:rgba(168,200,232,0.15);"><i class="fas fa-users" style="color:var(--card-blue)"></i></div><div><div class="stat-pill-num">2</div><div class="stat-pill-label">Integrantes</div></div></div></div>
 </div>
-
 
 <div class="row g-4 mb-4">
     <div class="col-md-7">
@@ -140,7 +105,6 @@
     </div>
 </div>
 
-
 <div class="row g-3 mb-4">
     <div class="col-12"><p class="section-title">Galería del proyecto</p><p class="section-sub">Capturas y recursos visuales del dashboard</p></div>
     <div class="col-md-4"><div class="article-card"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80" alt="Dashboard"><div class="article-card-body"><span class="article-tag tag-yellow">Dashboard</span><h6>Panel de Analíticas</h6><p>Vista principal con métricas de usuarios, ventas y crecimiento en tiempo real.</p></div></div></div>
@@ -148,13 +112,12 @@
     <div class="col-md-4"><div class="article-card"><img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=600&q=80" alt="Clientes"><div class="article-card-body"><span class="article-tag tag-pink">Clientes</span><h6>Gestión de Clientes</h6><p>Administración con segmentación y sistema de búsqueda avanzada.</p></div></div></div>
 </div>
 
-
 <div class="row g-3 mb-4">
     <div class="col-12"><p class="section-title">Equipo de desarrollo</p><p class="section-sub">Integrantes del grupo — Programación Avanzada 2025</p></div>
     <div class="col-md-6">
         <div class="team-card tc-yellow">
-            <div class="team-avatar">A</div>
-            <div class="team-name">Nombre Integrante 1</div>
+            <div class="team-avatar">S</div>
+            <div class="team-name">Sara Sofia Mora Trujillo</div>
             <div class="team-role">Desarrollador Frontend · Diseño UI/UX</div>
             <p class="team-desc">Responsable del diseño visual, estructura de vistas Blade, integración de Bootstrap y estilización Soft UI.</p>
             <div class="d-flex justify-content-center gap-2 mt-3"><span class="article-tag tag-yellow">Blade</span><span class="article-tag tag-yellow">CSS</span><span class="article-tag tag-yellow">Bootstrap</span></div>
@@ -162,8 +125,8 @@
     </div>
     <div class="col-md-6">
         <div class="team-card tc-pink">
-            <div class="team-avatar">B</div>
-            <div class="team-name">Nombre Integrante 2</div>
+            <div class="team-avatar">M</div>
+            <div class="team-name">Jose Mauricio Cantuca Narvaez</div>
             <div class="team-role">Desarrollador Backend · Base de Datos</div>
             <p class="team-desc">Responsable de rutas Laravel, controladores, modelos Eloquent y conexión con PostgreSQL.</p>
             <div class="d-flex justify-content-center gap-2 mt-3"><span class="article-tag tag-pink">Laravel</span><span class="article-tag tag-pink">PHP</span><span class="article-tag tag-pink">PostgreSQL</span></div>
@@ -185,38 +148,109 @@
                     </div>
                 </div>
                 <div class="col-md-8">
+
+                    {{-- ✅ Mensaje de éxito --}}
+                    @if(session('pqrs_success'))
+                        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert" style="border-radius:12px;">
+                            <i class="fas fa-check-circle me-2"></i>{{ session('pqrs_success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
+                    {{-- ❌ Errores de validación --}}
+                    @if($errors->any())
+                        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert" style="border-radius:12px;">
+                            <i class="fas fa-exclamation-circle me-2"></i><strong>Corrige los siguientes errores:</strong>
+                            <ul class="mb-0 mt-1">
+                                @foreach($errors->all() as $error)
+                                    <li style="font-size:0.82rem;">{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    @endif
+
                     <label class="pqrs-label mb-2">Tipo de solicitud</label>
                     <div class="row g-2 mb-4">
-                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'peticion')"><i class="fas fa-hand-paper"></i>Petición</div></div>
+                        <div class="col-6 col-md-3"><div class="pqrs-type-btn active" onclick="selectTipo(this,'peticion')"><i class="fas fa-hand-paper"></i>Petición</div></div>
                         <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'queja')"><i class="fas fa-exclamation-triangle"></i>Queja</div></div>
                         <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'reclamo')"><i class="fas fa-times-circle"></i>Reclamo</div></div>
-                        <div class="col-6 col-md-3"><div class="pqrs-type-btn active" onclick="selectTipo(this,'sugerencia')"><i class="fas fa-lightbulb"></i>Sugerencia</div></div>
+                        <div class="col-6 col-md-3"><div class="pqrs-type-btn" onclick="selectTipo(this,'sugerencia')"><i class="fas fa-lightbulb"></i>Sugerencia</div></div>
                     </div>
 
-
-                    <form method="POST" action="{{ route('pqrs.store') }}">
+                    <form action="{{ route('pqrs.store') }}" method="POST">
                         @csrf
 
-                        <input type="hidden" name="tipo" id="tipo_hidden" value="sugerencia">
+                        {{-- Input oculto para el tipo seleccionado --}}
+                        <input type="hidden" name="tipo" id="tipoHidden" value="{{ old('tipo', 'peticion') }}">
+
                         <div class="row g-3">
                             <div class="col-md-6">
                                 <label class="pqrs-label">Nombre completo</label>
-                                <input type="text" name="nombre" class="form-control pqrs-input"
-                                    placeholder="Tu nombre" value="{{ old('nombre') }}" required>
+                                <input type="text" name="nombre"
+                                       class="form-control pqrs-input @error('nombre') is-invalid @enderror"
+                                       placeholder="Tu nombre"
+                                       value="{{ old('nombre') }}">
+                                @error('nombre')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
                             </div>
+
                             <div class="col-md-6">
                                 <label class="pqrs-label">Correo electrónico</label>
-                                <input type="email" name="email" class="form-control pqrs-input"
-                                    placeholder="correo@ejemplo.com" value="{{ old('email') }}" required>
+                                <input type="email" name="email"
+                                       class="form-control pqrs-input @error('email') is-invalid @enderror"
+                                       placeholder="correo@ejemplo.com"
+                                       value="{{ old('email') }}">
+                                @error('email')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
                             </div>
-                            <div class="col-12">
-                                <label class="pqrs-label">Mensaje / Descripción detallada</label>
-                                <textarea name="mensaje" class="form-control pqrs-input" rows="4"
-                                    placeholder="Describe tu solicitud con el mayor detalle posible..." required>{{ old('mensaje') }}</textarea>
+
+                            <div class="col-md-6">
+                                <label class="pqrs-label">Teléfono</label>
+                                <input type="text" name="telefono"
+                                       class="form-control pqrs-input"
+                                       placeholder="+57 300 000 0000"
+                                       value="{{ old('telefono') }}">
                             </div>
+
+                            <div class="col-md-6">
+                                <label class="pqrs-label">Módulo relacionado</label>
+                                <select name="modulo" class="form-select pqrs-input">
+                                    <option value="">Seleccionar...</option>
+                                    <option {{ old('modulo')=='Dashboard' ? 'selected':'' }}>Dashboard</option>
+                                    <option {{ old('modulo')=='Ventas'    ? 'selected':'' }}>Ventas</option>
+                                    <option {{ old('modulo')=='Clientes'  ? 'selected':'' }}>Clientes</option>
+                                    <option {{ old('modulo')=='Facturas'  ? 'selected':'' }}>Facturas</option>
+                                    <option {{ old('modulo')=='Mensajes'  ? 'selected':'' }}>Mensajes</option>
+                                    <option {{ old('modulo')=='Otro'      ? 'selected':'' }}>Otro</option>
+                                </select>
+                            </div>
+
                             <div class="col-12">
-                                <button type="submit" class="btn btn-primary px-4 py-2"
-                                    style="font-size:0.88rem;font-weight:600;">
+                                <label class="pqrs-label">Asunto</label>
+                                <input type="text" name="asunto"
+                                       class="form-control pqrs-input @error('asunto') is-invalid @enderror"
+                                       placeholder="Resumen breve de tu solicitud"
+                                       value="{{ old('asunto') }}">
+                                @error('asunto')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <label class="pqrs-label">Descripción detallada</label>
+                                <textarea name="mensaje" rows="4"
+                                          class="form-control pqrs-input @error('mensaje') is-invalid @enderror"
+                                          placeholder="Describe tu solicitud con el mayor detalle posible...">{{ old('mensaje') }}</textarea>
+                                @error('mensaje')
+                                    <div class="invalid-feedback" style="color:#f2a7c3;">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary px-4 py-2" style="font-size:0.88rem;font-weight:600;">
                                     <i class="fas fa-paper-plane me-2"></i>Enviar solicitud
                                 </button>
                                 <span style="font-size:0.72rem;color:rgba(255,255,255,0.3);margin-left:1rem;">
@@ -232,76 +266,74 @@
     </div>
 </div>
 
-<<<<<<< HEAD
-<div class="row mb-4">
+{{-- ===== TABLA DE SOLICITUDES PQRS ===== --}}
+<div class="row mt-2 mb-4">
     <div class="col-12">
-        <div class="pqrs-table-wrapper">
-            <p class="pqrs-table-title">
-                <i class="fas fa-table me-2" style="color:var(--card-yellow);"></i>
-                Solicitudes Registradas
-            </p>
-            <p class="pqrs-table-sub">
-                Todos los PQRS enviados — {{ $pqrs->count() }} registro(s) en total
-            </p>
+        <p class="section-title">Solicitudes registradas</p>
+        <p class="section-sub">Historial de PQRS enviadas al sistema</p>
 
-            @if($pqrs->isEmpty())
-                {{-- Mensaje cuando no hay registros --}}
-                <div class="text-center py-5" style="color:#bbb;">
-                    <i class="fas fa-inbox" style="font-size:2.5rem;margin-bottom:1rem;display:block;"></i>
-                    <p style="font-family:'DM Sans',sans-serif;font-size:0.88rem;">
-                        Aún no hay solicitudes registradas. ¡Sé el primero en enviar una!
-                    </p>
-                </div>
-            @else
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle" style="font-family:'DM Sans',sans-serif;font-size:0.85rem;">
-                        <thead>
-                            <tr style="border-bottom:2px solid #f0f0f0;">
-                                <th style="color:#aaa;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">#</th>
-                                <th style="color:#aaa;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Nombre</th>
-                                <th style="color:#aaa;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Correo</th>
-                                <th style="color:#aaa;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Tipo</th>
-                                <th style="color:#aaa;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Mensaje</th>
-                                <th style="color:#aaa;font-weight:600;font-size:0.72rem;text-transform:uppercase;letter-spacing:0.5px;">Fecha</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($pqrs as $item)
-                            <tr style="border-bottom:1px solid #f8f8f8;">
-                                <td style="color:#bbb;font-size:0.75rem;">{{ $loop->iteration }}</td>
-                                <td>
-                                    <div style="display:flex;align-items:center;gap:10px;">
-                                        <div style="width:34px;height:34px;border-radius:50%;background:var(--card-yellow);display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:0.9rem;color:#6a5800;flex-shrink:0;">
-                                            {{ strtoupper(substr($item->nombre, 0, 1)) }}
-                                        </div>
-                                        <span style="font-weight:600;color:#1a1a1a;">{{ $item->nombre }}</span>
-                                    </div>
-                                </td>
-                                <td style="color:#888;">{{ $item->email }}</td>
-                                <td>
-                                    <span class="badge rounded-pill badge-{{ $item->tipo }}" style="font-size:0.72rem;padding:0.35rem 0.8rem;font-weight:600;">
-                                        @if($item->tipo === 'peticion')   <i class="fas fa-hand-paper me-1"></i>Petición
-                                        @elseif($item->tipo === 'queja')  <i class="fas fa-exclamation-triangle me-1"></i>Queja
-                                        @elseif($item->tipo === 'reclamo')<i class="fas fa-times-circle me-1"></i>Reclamo
-                                        @else                             <i class="fas fa-lightbulb me-1"></i>Sugerencia
-                                        @endif
-                                    </span>
-                                </td>
-                                <td style="color:#888;max-width:280px;">
-                                    <span title="{{ $item->mensaje }}">
-                                        {{ Str::limit($item->mensaje, 60) }}
-                                    </span>
-                                </td>
-                                <td style="color:#bbb;font-size:0.78rem;white-space:nowrap;">
-                                    <i class="fas fa-calendar me-1"></i>
-                                    {{ $item->created_at->format('d/m/Y H:i') }}
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
+        <div style="background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.07);overflow:hidden;">
+            <table class="table table-hover mb-0">
+                <thead style="background:#1a1a1a;color:#fff;">
+                    <tr>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">#</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Nombre</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Correo</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Tipo</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Módulo</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Asunto</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Estado</th>
+                        <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($pqrs as $item)
+                    <tr>
+                        <td style="padding:0.9rem 1.2rem;font-size:0.82rem;color:#aaa;">{{ $item->id }}</td>
+                        <td style="padding:0.9rem 1.2rem;font-size:0.82rem;font-weight:600;color:#1a1a1a;">{{ $item->nombre }}</td>
+                        <td style="padding:0.9rem 1.2rem;font-size:0.82rem;color:#666;">{{ $item->email }}</td>
+                        <td style="padding:0.9rem 1.2rem;">
+                            @php
+                                $colores = [
+                                    'peticion'   => ['bg'=>'rgba(232,212,77,0.2)',  'color'=>'#6a5800'],
+                                    'queja'      => ['bg'=>'rgba(242,167,195,0.2)', 'color'=>'#8a0040'],
+                                    'reclamo'    => ['bg'=>'rgba(245,184,154,0.2)', 'color'=>'#8a3000'],
+                                    'sugerencia' => ['bg'=>'rgba(143,187,110,0.2)', 'color'=>'#2a6a0a'],
+                                ];
+                                $c = $colores[$item->tipo] ?? ['bg'=>'#eee','color'=>'#333'];
+                            @endphp
+                            <span style="background:{{ $c['bg'] }};color:{{ $c['color'] }};font-size:0.7rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:20px;text-transform:capitalize;">
+                                {{ ucfirst($item->tipo) }}
+                            </span>
+                        </td>
+                        <td style="padding:0.9rem 1.2rem;font-size:0.82rem;color:#666;">{{ $item->modulo ?? '—' }}</td>
+                        <td style="padding:0.9rem 1.2rem;font-size:0.82rem;color:#444;">{{ Str::limit($item->asunto, 35) }}</td>
+                        <td style="padding:0.9rem 1.2rem;">
+                            @php
+                                $estados = [
+                                    'pendiente'  => ['bg'=>'rgba(245,184,154,0.2)', 'color'=>'#8a3000'],
+                                    'en_proceso' => ['bg'=>'rgba(168,200,232,0.2)', 'color'=>'#0a3060'],
+                                    'resuelto'   => ['bg'=>'rgba(143,187,110,0.2)', 'color'=>'#2a6a0a'],
+                                ];
+                                $e = $estados[$item->estado] ?? ['bg'=>'#eee','color'=>'#333'];
+                            @endphp
+                            <span style="background:{{ $e['bg'] }};color:{{ $e['color'] }};font-size:0.7rem;font-weight:700;padding:0.25rem 0.75rem;border-radius:20px;text-transform:capitalize;">
+                                {{ ucfirst(str_replace('_',' ',$item->estado)) }}
+                            </span>
+                        </td>
+                        <td style="padding:0.9rem 1.2rem;font-size:0.78rem;color:#aaa;">
+                            {{ $item->created_at->format('d/m/Y H:i') }}
+                        </td>
+                    </tr>
+                    @empty
+                    <tr>
+                        <td colspan="8" style="text-align:center;padding:2.5rem;color:#aaa;font-size:0.85rem;">
+                            <i class="fas fa-inbox me-2"></i>Aún no hay solicitudes registradas.
+                        </td>
+                    </tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -310,11 +342,20 @@
 
 @section('scripts')
 <script>
-
 function selectTipo(el, valor) {
     document.querySelectorAll('.pqrs-type-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
-    document.getElementById('tipo_hidden').value = valor;
+    document.getElementById('tipoHidden').value = valor;
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    const tipoActual = document.getElementById('tipoHidden').value;
+    const mapa = { peticion: 0, queja: 1, reclamo: 2, sugerencia: 3 };
+    const botones = document.querySelectorAll('.pqrs-type-btn');
+    if (tipoActual && mapa[tipoActual] !== undefined) {
+        botones.forEach(b => b.classList.remove('active'));
+        botones[mapa[tipoActual]].classList.add('active');
+    }
+});
 </script>
 @endsection

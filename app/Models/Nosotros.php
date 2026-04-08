@@ -9,9 +9,12 @@ class Nosotros extends Model
     protected $fillable = [
         'nombre',
         'email',
+        'telefono',
         'tipo',
+        'asunto',
         'mensaje',
+        'estado'
     ];
 
-    protected $table = 'nosotros';
+    protected $table = 'pqrs';
 }

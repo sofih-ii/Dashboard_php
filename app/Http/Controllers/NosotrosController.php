@@ -34,10 +34,12 @@ class NosotrosController extends Controller
         ]);
 
         Nosotros::create([
-            'nombre'  => $request->nombre,
-            'email'   => $request->email,
-            'tipo'    => $request->tipo,
-            'mensaje' => $request->mensaje,
+            'nombre'   => $request->nombre,
+            'email'    => $request->email,
+            'telefono' => $request->telefono,
+            'tipo'     => $request->tipo,
+            'asunto'   => $request->asunto,
+            'mensaje'  => $request->mensaje,
         ]);
 
 
