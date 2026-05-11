@@ -7,42 +7,145 @@
 @section('content')
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">Estadísticas</h1>
-    <button class="btn btn-sm btn-outline-secondary">Exportar</button>
+    <h1 class="h2"><i class="fas fa-chart-bar text-primary"></i> Estadísticas</h1>
+    <div class="btn-group me-2">
+        <button class="btn btn-sm btn-outline-secondary" onclick="window.print()">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+        <a href="{{ route('ventas.export') }}" class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-download"></i> Exportar Ventas
+        </a>
+    </div>
+</div>
+
+{{-- KPIs con datos reales --}}
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-users"></i> Usuarios Totales</h5>
+                <p class="card-text display-6">{{ $totalUsuarios }}</p>
+                <small class="text-white-50">Registrados en el sistema</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-shopping-cart"></i> Ventas Totales</h5>
+                <p class="card-text display-6">${{ number_format($totalVentas, 0, ',', '.') }}</p>
+                <small class="text-white-50">Ingresos acumulados</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-chart-line"></i> Crecimiento</h5>
+                <p class="card-text display-6">{{ $crecimiento }}</p>
+                <small class="text-white-50">vs mes anterior</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-envelope-open"></i> Sin Leer</h5>
+                <p class="card-text display-6">{{ $sinLeer }}</p>
+                <small class="text-white-50">Mensajes pendientes</small>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-3"><div class="card text-white bg-primary mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-users"></i> Usuarios Totales</h5><p class="card-text display-6">5,432</p><small class="text-white-50">+12% este mes</small></div></div></div>
-    <div class="col-md-3"><div class="card text-white bg-success mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-shopping-cart"></i> Ventas Totales</h5><p class="card-text display-6">$45,890</p><small class="text-white-50">+25% este mes</small></div></div></div>
-    <div class="col-md-3"><div class="card text-white bg-warning mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-chart-line"></i> Crecimiento</h5><p class="card-text display-6">+18%</p><small class="text-white-50">vs mes anterior</small></div></div></div>
-    <div class="col-md-3"><div class="card text-white bg-info mb-3"><div class="card-body"><h5 class="card-title"><i class="fas fa-comment-dots"></i> Mensajes</h5><p class="card-text display-6">234</p><small class="text-white-50">Sin leer</small></div></div></div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Ventas Mensuales (Últimos 6 meses)</h5></div>
+            <div class="card-body"><canvas id="ventasChart" height="200"></canvas></div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Segmentación de Clientes</h5></div>
+            <div class="card-body"><canvas id="segmentacionChart" height="200"></canvas></div>
+        </div>
+    </div>
 </div>
 
 <div class="row mb-4">
-    <div class="col-md-6"><div class="card"><div class="card-header"><h5>Ventas Mensuales</h5></div><div class="card-body"><canvas id="ventasChart" height="200"></canvas></div></div></div>
-    <div class="col-md-6"><div class="card"><div class="card-header"><h5>Género de Usuarios</h5></div><div class="card-body"><canvas id="generoChart" height="200"></canvas></div></div></div>
-</div>
-
-<div class="row mb-4">
-    <div class="col-md-6"><div class="card"><div class="card-header"><h5>Productos Más Vendidos</h5></div><div class="card-body"><canvas id="productosChart" height="200"></canvas></div></div></div>
-    <div class="col-md-6"><div class="card"><div class="card-header"><h5>Distribución de Ingresos</h5></div><div class="card-body"><canvas id="ingresosChart" height="200"></canvas></div></div></div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Productos Más Vendidos</h5></div>
+            <div class="card-body">
+                @if($productos->isEmpty())
+                    <p class="text-muted text-center py-4">No hay datos de ventas aún.</p>
+                @else
+                    <canvas id="productosChart" height="200"></canvas>
+                @endif
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h5>Distribución por Estado de Ventas</h5></div>
+            <div class="card-body">
+                @if($estadosVentas->isEmpty())
+                    <p class="text-muted text-center py-4">No hay datos de ventas aún.</p>
+                @else
+                    <canvas id="estadosChart" height="200"></canvas>
+                @endif
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header"><h5>Estadísticas de Productos</h5></div>
+            <div class="card-header"><h5>Productos Más Vendidos</h5></div>
             <div class="card-body">
-                <table class="table table-striped table-hover">
-                    <thead><tr><th>Producto</th><th>Vendidas</th><th>Ingresos</th><th>Margen</th><th>Estado</th></tr></thead>
-                    <tbody>
-                        <tr><td><i class="fas fa-cube"></i> Laptop Pro</td><td>156</td><td>$23,400</td><td>35%</td><td><span class="badge bg-success">Alto</span></td></tr>
-                        <tr><td><i class="fas fa-mobile-alt"></i> Smartphone X</td><td>342</td><td>$15,890</td><td>28%</td><td><span class="badge bg-success">Alto</span></td></tr>
-                        <tr><td><i class="fas fa-headphones"></i> Auriculares</td><td>89</td><td>$2,670</td><td>42%</td><td><span class="badge bg-warning">Medio</span></td></tr>
-                        <tr><td><i class="fas fa-tablet-alt"></i> Tablet Plus</td><td>67</td><td>$3,350</td><td>25%</td><td><span class="badge bg-warning">Medio</span></td></tr>
-                        <tr><td><i class="fas fa-camera"></i> Cámara Digital</td><td>45</td><td>$2,250</td><td>18%</td><td><span class="badge bg-danger">Bajo</span></td></tr>
-                    </tbody>
-                </table>
+                @if($productos->isEmpty())
+                    <p class="text-muted text-center py-4">
+                        <i class="fas fa-box-open fa-2x mb-2 d-block"></i>
+                        No hay ventas registradas aún.
+                    </p>
+                @else
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Producto</th>
+                                <th>Unidades Vendidas</th>
+                                <th>Ingresos</th>
+                                <th>Rendimiento</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($productos as $i => $p)
+                            <tr>
+                                <td>{{ $i + 1 }}</td>
+                                <td><i class="fas fa-cube text-primary me-1"></i> {{ $p->producto }}</td>
+                                <td>{{ $p->vendidas }}</td>
+                                <td>${{ number_format($p->ingresos, 2) }}</td>
+                                <td>
+                                    @php
+                                        $max = $productos->max('vendidas');
+                                        $pct = $max > 0 ? round(($p->vendidas / $max) * 100) : 0;
+                                        $cls = $pct >= 70 ? 'success' : ($pct >= 40 ? 'warning' : 'danger');
+                                    @endphp
+                                    <div class="d-flex align-items-center gap-2">
+                                        <div class="progress flex-fill" style="height:8px;">
+                                            <div class="progress-bar bg-{{ $cls }}" style="width:{{ $pct }}%"></div>
+                                        </div>
+                                        <span class="badge bg-{{ $cls }} small">{{ $pct }}%</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
             </div>
         </div>
     </div>
@@ -52,25 +155,89 @@
 
 @section('scripts')
 <script>
+// Ventas mensuales
 new Chart(document.getElementById('ventasChart').getContext('2d'), {
     type: 'line',
-    data: { labels: ['Enero','Febrero','Marzo','Abril','Mayo','Junio'], datasets: [{ label: 'Ventas ($)', data: [5000,7500,6800,9200,11500,14200], borderColor: 'rgb(75,192,192)', backgroundColor: 'rgba(75,192,192,0.1)', tension: 0.3, fill: true }] },
-    options: { responsive: true }
+    data: {
+        labels: @json($labelsMeses),
+        datasets: [{
+            label: 'Ventas ($)',
+            data: @json($ventasMensuales),
+            borderColor: 'rgb(75,192,192)',
+            backgroundColor: 'rgba(75,192,192,0.1)',
+            tension: 0.3,
+            fill: true,
+            pointBackgroundColor: 'rgb(75,192,192)',
+            pointRadius: 5
+        }]
+    },
+    options: { responsive: true, plugins: { legend: { position: 'top' } } }
 });
-new Chart(document.getElementById('generoChart').getContext('2d'), {
+
+// Segmentación
+@if($segmentacion->isNotEmpty())
+new Chart(document.getElementById('segmentacionChart').getContext('2d'), {
     type: 'doughnut',
-    data: { labels: ['Hombres','Mujeres','Otros'], datasets: [{ data: [55,40,5], backgroundColor: ['rgba(54,162,235,0.8)','rgba(255,99,132,0.8)','rgba(255,206,86,0.8)'] }] },
+    data: {
+        labels: @json($segmentacion->keys()->map(fn($k) => ucfirst($k))),
+        datasets: [{
+            data: @json($segmentacion->values()),
+            backgroundColor: [
+                'rgba(255,193,7,0.8)',
+                'rgba(40,167,69,0.8)',
+                'rgba(23,162,184,0.8)',
+                'rgba(220,53,69,0.8)'
+            ]
+        }]
+    },
     options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
 });
+@else
+document.getElementById('segmentacionChart').parentElement.innerHTML =
+    '<p class="text-muted text-center py-4">No hay clientes registrados aún.</p>';
+@endif
+
+// Productos más vendidos
+@if($productos->isNotEmpty())
 new Chart(document.getElementById('productosChart').getContext('2d'), {
     type: 'bar',
-    data: { labels: ['Laptop','Smartphone','Auriculares','Tablet','Cámara'], datasets: [{ label: 'Unidades Vendidas', data: [156,342,89,67,45], backgroundColor: ['rgba(75,192,192,0.8)','rgba(54,162,235,0.8)','rgba(255,206,86,0.8)','rgba(75,192,192,0.8)','rgba(255,99,132,0.8)'] }] },
-    options: { responsive: true, indexAxis: 'y', plugins: { legend: { display: false } } }
+    data: {
+        labels: @json($productos->pluck('producto')),
+        datasets: [{
+            label: 'Unidades Vendidas',
+            data: @json($productos->pluck('vendidas')),
+            backgroundColor: [
+                'rgba(75,192,192,0.8)','rgba(54,162,235,0.8)',
+                'rgba(255,206,86,0.8)','rgba(75,192,192,0.8)','rgba(255,99,132,0.8)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: { legend: { display: false } }
+    }
 });
-new Chart(document.getElementById('ingresosChart').getContext('2d'), {
+@endif
+
+// Estados de ventas
+@if($estadosVentas->isNotEmpty())
+new Chart(document.getElementById('estadosChart').getContext('2d'), {
     type: 'pie',
-    data: { labels: ['Electrónica','Accesorios','Servicios','Otros'], datasets: [{ data: [45,25,20,10], backgroundColor: ['rgba(75,192,192,0.8)','rgba(54,162,235,0.8)','rgba(255,206,86,0.8)','rgba(255,99,132,0.8)'] }] },
+    data: {
+        labels: @json($estadosVentas->keys()->map(fn($k) => ucfirst(str_replace('_',' ',$k)))),
+        datasets: [{
+            data: @json($estadosVentas->values()),
+            backgroundColor: [
+                'rgba(40,167,69,0.8)',
+                'rgba(255,193,7,0.8)',
+                'rgba(23,162,184,0.8)',
+                'rgba(220,53,69,0.8)'
+            ]
+        }]
+    },
     options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
 });
+@endif
 </script>
 @endsection

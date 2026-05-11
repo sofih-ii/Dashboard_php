@@ -92,18 +92,28 @@ class AuthController extends Controller
     public function updatePerfil(Request $request)
     {
         $request->validate([
-            'name'  => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . Auth::id(),
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email,' . Auth::id(),
+            'phone'    => 'nullable|string|max:20',
+            'timezone' => 'nullable|string|max:60',
+            'language' => 'nullable|string|max:10',
+            'avatar'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ], [
             'name.required'  => 'El nombre es obligatorio.',
             'email.required' => 'El correo es obligatorio.',
             'email.unique'   => 'Este correo ya está en uso.',
+            'avatar.image'   => 'El archivo debe ser una imagen.',
+            'avatar.max'     => 'La imagen no puede superar los 2 MB.',
         ]);
 
-        Auth::user()->update([
-            'name'  => $request->name,
-            'email' => $request->email,
-        ]);
+        $data = $request->only(['name', 'email', 'phone', 'timezone', 'language']);
+
+        if ($request->hasFile('avatar')) {
+            $path = $request->file('avatar')->store('avatars', 'public');
+            $data['avatar'] = $path;
+        }
+
+        Auth::user()->update($data);
 
         return back()->with('success', 'Perfil actualizado correctamente.');
     }
