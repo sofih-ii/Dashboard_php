@@ -56,11 +56,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/ventas/{id}',  [VentaController::class, 'destroy'])->name('ventas.destroy');
 
     // Clientes
-    Route::get('/clientes/exportar', [ClienteController::class, 'export'])->name('clientes.export');
-    Route::get('/clientes',          [DashboardController::class, 'clientes'])->name('clientes');
-    Route::post('/clientes',         [ClienteController::class, 'store'])->name('clientes.store');
-    Route::put('/clientes/{id}',     [ClienteController::class, 'update'])->name('clientes.update');
-    Route::delete('/clientes/{id}',  [ClienteController::class, 'destroy'])->name('clientes.destroy');
+    Route::get('/clientes/exportar',  [ClienteController::class, 'export'])->name('clientes.export');
+    Route::get('/clientes',           [DashboardController::class, 'clientes'])->name('clientes');
+    Route::post('/clientes',          [ClienteController::class, 'store'])->name('clientes.store');
+    Route::get('/clientes/{id}/edit', [ClienteController::class, 'edit'])->name('clientes.edit');
+    Route::put('/clientes/{id}',      [ClienteController::class, 'update'])->name('clientes.update');
+    Route::delete('/clientes/{id}',   [ClienteController::class, 'destroy'])->name('clientes.destroy');
 
     // Facturas
     Route::get('/facturas/exportar', [FacturaController::class, 'export'])->name('facturas.export');

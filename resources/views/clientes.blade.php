@@ -366,6 +366,16 @@
 <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script>
+    // ── Auto-abrir modal de edición si se viene desde /clientes/{id}/edit ──────
+    @if(session('editarId'))
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.querySelector(
+            '[data-bs-target="#modalEditarCliente"][data-id="{{ session('editarId') }}"]'
+        );
+        if (btn) { btn.click(); }
+    });
+    @endif
+
     // ── DataTables ─────────────────────────────────────────────────────────────
     $(document).ready(function () {
         $('#tablaClientes').DataTable({

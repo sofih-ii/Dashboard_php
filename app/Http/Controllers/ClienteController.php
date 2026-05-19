@@ -36,6 +36,12 @@ class ClienteController extends Controller
         return redirect()->route('clientes')->with('success', 'Cliente creado correctamente.');
     }
 
+    public function edit($id)
+    {
+        Cliente::findOrFail($id);
+        return redirect()->route('clientes')->with('editarId', $id);
+    }
+
     public function update(Request $request, $id)
     {
         $cliente = Cliente::findOrFail($id);
