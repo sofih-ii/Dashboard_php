@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('title', 'Facturas - Dashboard')
+
+@section('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+@endsection
 @section('side_facturas', 'active')
 
 @section('content')
@@ -93,18 +97,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Listado de Facturas</h5>
-                <div class="d-flex gap-2">
-                    <input type="text" class="form-control form-control-sm"
-                           placeholder="Buscar factura..." id="buscarFactura">
-                    <select class="form-select form-select-sm w-auto" id="filtroEstadoFactura">
-                        <option value="">Todos</option>
-                        <option value="pagada">Pagadas</option>
-                        <option value="pendiente">Pendientes</option>
-                        <option value="vencida">Vencidas</option>
-                    </select>
-                </div>
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-file-invoice-dollar me-1"></i> Listado de Facturas</h5>
             </div>
             <div class="card-body">
                 <table class="table table-striped table-hover" id="tablaFacturas">
@@ -334,7 +328,26 @@
 @endsection
 
 @section('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script>
+    // ── DataTables ─────────────────────────────────────────────────────────────
+    $(document).ready(function () {
+        $('#tablaFacturas').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+            },
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ],
+            order: [[0, 'desc']]
+        });
+    });
+
     function verFactura(btn) {
         document.getElementById('fv-numero').textContent      = btn.dataset.numero;
         document.getElementById('fv-cliente').textContent     = btn.dataset.cliente;
@@ -350,18 +363,6 @@
         document.getElementById('ef-estado').value       = btn.dataset.estado;
         document.getElementById('formEstadoFactura').action = '/facturas/' + btn.dataset.id;
     }
-
-    // Búsqueda y filtro
-    function filtrarFacturas() {
-        const q      = document.getElementById('buscarFactura').value.toLowerCase();
-        const estado = document.getElementById('filtroEstadoFactura').value.toLowerCase();
-        document.querySelectorAll('#tablaFacturas tbody tr').forEach(row => {
-            const texto = row.innerText.toLowerCase();
-            row.style.display = (texto.includes(q) && (estado === '' || texto.includes(estado))) ? '' : 'none';
-        });
-    }
-    document.getElementById('buscarFactura').addEventListener('keyup', filtrarFacturas);
-    document.getElementById('filtroEstadoFactura').addEventListener('change', filtrarFacturas);
 
     // Gráfica barras - Facturación mensual (decorativa)
     new Chart(document.getElementById('facturacionChart').getContext('2d'), {

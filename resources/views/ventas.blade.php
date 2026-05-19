@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('title', 'Ventas - Dashboard')
+
+@section('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+@endsection
 @section('side_ventas', 'active')
 
 @section('content')
@@ -90,10 +94,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Últimas Ventas</h5>
-                <input type="text" class="form-control form-control-sm w-25"
-                       placeholder="Buscar..." id="buscarVenta">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-shopping-cart me-1"></i> Listado de Ventas</h5>
             </div>
             <div class="card-body">
                 <table class="table table-striped table-hover" id="tablaVentas">
@@ -319,7 +321,26 @@
 @endsection
 
 @section('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script>
+    // ── DataTables ─────────────────────────────────────────────────────────────
+    $(document).ready(function () {
+        $('#tablaVentas').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+            },
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: -1 }
+            ],
+            order: [[0, 'desc']]
+        });
+    });
+
     // Ver venta
     function verVenta(btn) {
         document.getElementById('vv-orden').textContent    = btn.dataset.orden;
@@ -336,14 +357,6 @@
         document.getElementById('ev-estado').value      = btn.dataset.estado;
         document.getElementById('formEstadoVenta').action = '/ventas/' + btn.dataset.id;
     }
-
-    // Búsqueda
-    document.getElementById('buscarVenta').addEventListener('keyup', function () {
-        const q = this.value.toLowerCase();
-        document.querySelectorAll('#tablaVentas tbody tr').forEach(row => {
-            row.style.display = row.innerText.toLowerCase().includes(q) ? '' : 'none';
-        });
-    });
 
     // Gráfica barras - Ventas por mes (decorativa)
     new Chart(document.getElementById('ventasMesChart').getContext('2d'), {

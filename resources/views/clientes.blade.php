@@ -4,6 +4,10 @@
 @section('nav_clientes', 'active')
 @section('side_clientes', 'active')
 
+@section('styles')
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap5.min.css">
+@endsection
+
 @section('content')
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -91,16 +95,8 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Lista de Clientes</h5>
-                <div class="d-flex gap-2">
-                    <input type="text" class="form-control form-control-sm" placeholder="Buscar cliente..." id="buscarCliente">
-                    <select class="form-select form-select-sm w-auto" id="filtroEstado">
-                        <option value="">Todos</option>
-                        <option value="activo">Activos</option>
-                        <option value="inactivo">Inactivos</option>
-                    </select>
-                </div>
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-users me-1"></i> Lista de Clientes</h5>
             </div>
             <div class="card-body">
                 <table class="table table-striped table-hover" id="tablaClientes">
@@ -366,7 +362,26 @@
 @endsection
 
 @section('scripts')
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.8/js/dataTables.bootstrap5.min.js"></script>
 <script>
+    // ── DataTables ─────────────────────────────────────────────────────────────
+    $(document).ready(function () {
+        $('#tablaClientes').DataTable({
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.13.8/i18n/es-ES.json'
+            },
+            pageLength: 10,
+            lengthMenu: [5, 10, 25, 50],
+            responsive: true,
+            columnDefs: [
+                { orderable: false, targets: -1 }   // columna Acciones no ordenable
+            ],
+            order: [[0, 'asc']]
+        });
+    });
+
     // Ver cliente
     function verCliente(btn) {
         document.getElementById('ver-nombre').textContent   = btn.dataset.nombre;
@@ -389,18 +404,6 @@
         document.getElementById('edit-estado').value    = btn.dataset.estado;
         document.getElementById('edit-segmento').value  = btn.dataset.segmento;
     }
-
-    // Búsqueda y filtro
-    function filtrarTabla() {
-        const q      = document.getElementById('buscarCliente').value.toLowerCase();
-        const estado = document.getElementById('filtroEstado').value.toLowerCase();
-        document.querySelectorAll('#tablaClientes tbody tr').forEach(row => {
-            const texto = row.innerText.toLowerCase();
-            row.style.display = (texto.includes(q) && (estado === '' || texto.includes(estado))) ? '' : 'none';
-        });
-    }
-    document.getElementById('buscarCliente').addEventListener('keyup', filtrarTabla);
-    document.getElementById('filtroEstado').addEventListener('change', filtrarTabla);
 
     // Gráfica barras - Clientes por mes (estética)
     new Chart(document.getElementById('clientesMesChart').getContext('2d'), {
