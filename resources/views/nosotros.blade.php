@@ -5,6 +5,7 @@
 @section('side_nosotros', 'active')
 
 @section('styles')
+<link rel="stylesheet" href="//cdn.datatables.net/2.3.8/css/dataTables.dataTables.min.css">
 <style>
     .hero-nosotros { background:#1a1a1a; border-radius:20px; padding:3rem; margin-bottom:2rem; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:2rem; }
     .hero-nosotros::before { content:''; position:absolute; top:-60px; right:-60px; width:260px; height:260px; background:var(--card-yellow); border-radius:50%; opacity:0.08; }
@@ -272,8 +273,8 @@
         <p class="section-title">Solicitudes registradas</p>
         <p class="section-sub">Historial de PQRS enviadas al sistema</p>
 
-        <div style="background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.07);overflow:hidden;">
-            <table class="table table-hover mb-0">
+        <div style="background:#fff;border-radius:20px;box-shadow:0 4px 20px rgba(0,0,0,0.07);overflow:hidden;padding:1rem;">
+            <table id="myTable" class="table table-hover mb-0">
                 <thead style="background:#1a1a1a;color:#fff;">
                     <tr>
                         <th style="padding:1rem 1.2rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;letter-spacing:0.5px;">#</th>
@@ -341,7 +342,12 @@
 @endsection
 
 @section('scripts')
+<script src="//cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
+    let table = new DataTable('#myTable');
+});
+
 function selectTipo(el, valor) {
     document.querySelectorAll('.pqrs-type-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
